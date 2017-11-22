@@ -10,7 +10,6 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -25,7 +24,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author awarsyle
+ * @author 727334
  */
 @Entity
 @Table(name = "note")
@@ -55,7 +54,7 @@ public class Note implements Serializable {
     @Column(name = "Contents")
     private String contents;
     @JoinColumn(name = "Owner", referencedColumnName = "Username")
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false)
     private User owner;
 
     public Note() {

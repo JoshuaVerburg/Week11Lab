@@ -9,6 +9,7 @@ import dataaccess.NotesDBException;
 import dataaccess.UserDB;
 import domainmodel.*;
 import java.util.HashMap;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.mail.MessagingException;
@@ -54,5 +55,48 @@ public class AccountService {
         
         return null;
     }
+    
+    public User resetPassword(String email,String path, String link, String uuid){
+        User user = null;
+        
+        UserDB userDB = new UserDB();
+        try {
+           user = userDB.getEmail(email);
+        } catch (NotesDBException ex) {
+            Logger.getLogger(AccountService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        String username = null;
+        username = user.getUsername();
+        try {
+            user = userDB.getUser(username);
+        } catch (NotesDBException ex) {
+            Logger.getLogger(AccountService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+            
+                try {
+                    //WebMailService.sendMail(user.getEmail(), "NotesKeepr Logged in", "<h2>Congrats!  You just loggedin successfully.</h2>" , true);
+                    user.setResetPasswordUUID(uuid);
+                    userDB.update(user);
+
+                    HashMap<String, String> contents = new HashMap<>();
+                    
+                    contents.put("firstname", user.getFirstname());
+                    contents.put("lastname", user.getLastname());
+                    contents.put("username", user.getUsername());
+                    contents.put("link", link);
+                    
+                    String template = path + "/emailtemplates/resetpassword.html";
+                    WebMailService.sendMail(user.getEmail(), "NotesKeepr Reset", template, contents);
+                    
+                } catch (Exception ex) {
+                    Logger.getLogger(AccountService.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                return user;
+
+            }
+        
+        
+        
+    
     
 }

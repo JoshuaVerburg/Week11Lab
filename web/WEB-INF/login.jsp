@@ -19,5 +19,6 @@
             <input type="submit" value="Login">
         </form>
         ${errormessage}
+        <a href="reset">Reset password</a>
     </body>
 </html>
